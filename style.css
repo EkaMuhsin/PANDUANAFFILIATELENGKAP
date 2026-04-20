@@ -1,0 +1,603 @@
+
+/* ### BODY ### BODY ### BODY ### */
+body {
+  background: 
+      radial-gradient(
+      circle at 50% 30%,
+      rgba(0, 140, 255, 0.3),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 50% 80%,
+      rgba(0, 80, 200, 0.2),
+      transparent 50%
+    ),
+    #020617;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.subtitle1 {
+  font-size: 16px;
+  font-family: 'Courier New', monospace;
+}
+
+/* ### HALAMAN 1 ### HALAMAN 1 ### HALAMAN 1 ### */
+/* >>>>>>>>>>>>>>> HEADER LOGO+JUDUL+TEXTPOJOK <<<<<<<<<<<<<<< */
+.header {
+  text-align: center;
+  padding: 20px;
+}
+
+/* LOGO*/
+.logo {
+  width: 200px;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 10px rgba(255,215,0,0.6));
+}
+
+/* JUDUL PANDUAN AFFILIATOR TIM */
+.title {
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1.4;
+  font-family: 'League Spartan Bold', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+/* JUDUL AFFILIATE MASTERMIND */
+.brand {
+  color: #38bdf8;
+  font-weight: bold;
+  filter: drop-shadow(0 0 15px rgba(79, 174, 247, 0.6));
+  margin-top: 2px;
+  font-size: 26px;
+}
+
+/* GARIS */
+.garis {
+  border: none;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #38bdf8, transparent);
+  margin: 20px 0;
+}
+
+/* TEXT POJOK */
+.textpojok {
+  position: absolute;
+  font-size: xx-small;
+  top: 20px;
+  right: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #7a8599;
+  z-index: 999;
+}
+
+/* TEXT SOSMED */
+.sosmed a {
+  color: #38bdf8;
+  margin: 5px;
+}
+
+/* >>>>>>>>>>>>>>> MENU <<<<<<<<<<<<<<< */
+/* MENU */
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size:14px;
+  font-weight:bold;
+  letter-spacing: 0.5px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(15, 11, 91, 0.347);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.1);
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* HOVER MENU */
+.menu:hover {
+  transform: translateY(-2px);
+  background: #38bdf8;
+  color: rgb(59, 222, 255);
+}
+
+/* TEKS MENU */
+.card {
+  background: #1e293b9a;
+  padding: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 2px solid rgba(0, 157, 255, 0.6);
+  transition:0.3s;
+  backdrop-filter: blur(10px);
+}
+
+/* HOVER TEXT MENU */
+.card:hover {
+  background: #1b2431;
+  border: 2px solid #38bdf8;
+  transform: translateY(-5px) scale(1.02);
+  box-shadow:0 10px 25px rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+}
+
+/* >>>>>>>>>>>>>>> TEXT BAWAH MENU <<<<<<<<<<<<<<< */
+/* KATA KATA DI BAWAH MENU */
+.subtitle {
+  text-align: center;
+  font-size: 16px;
+  color: #ffffff;
+  margin-top: 8px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  transform: skewX(-5deg);
+  filter: drop-shadow(0 0 10px rgba(0, 157, 255, 0.6));
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* KATA KATA KRITI SARAN */
+.follow {
+  font-family: 'Poppins', sans-serif;
+  color: crimson;
+  stroke: goldenrod;
+  font-size: 16px;
+}
+
+/* ALAMAT SOSMED */
+.sosmed a{
+  color: #06b6d4;
+  font-size: 15px;
+}
+
+/* ### HALAMAN 2 ### HALAMAN 2 ### HALAMAN 2 ### */
+/* DESAIN BOX */
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size:29px;
+  font-weight:bold;
+  letter-spacing: 0.5px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(15, 11, 91, 0.347);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.1);
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.detail:hover {
+  transform: translateY(-2px);
+  background: #38bdf8;
+  color: #020617;
+}
+
+.detail2 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(11, 9, 56, 0.356);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.1);;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* JUDUL */
+.judulh3 {
+  font-size: 29px;
+}
+
+.kirii {
+  margin: 10px 0;
+}
+
+/* ### HALAMAN 3 ### HALAMAN 3 ### HALAMAN 3 ### */
+/* INPUT */
+input {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 8px;
+  border: none;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+}
+
+.list {
+  padding: 0;
+}
+
+.list li {
+  list-style: none;
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  background: #1e293b9a;
+  cursor: pointer;
+  border: 2px solid rgba(0, 157, 255, 0.6);
+  transition:0.3s;
+  backdrop-filter: blur(10px);
+}
+
+.list li:hover {
+  background: #1b2431;
+  border: 2px solid #38bdf8;
+  transform: translateY(-5px) scale(1.02);
+  box-shadow:0 10px 25px rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+}
+
+.atas {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  color:#ffffff;
+  text-align: left;
+  border-left: 4px solid #22d3ee;
+  padding-left: 15px;
+  margin: 15px 0;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* ### HALAMAN CARA BUAT ### HALAMAN CARA BUAT ### HALAMAN CARA BUAT ### */
+/* JUDUL */
+.judul-section{
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.sub{
+  color:#22d3ee;
+  margin-bottom:10px;
+}
+
+/* STEP */
+.step{
+  color:#ffffff;
+  margin-top:20px;
+  text-align: left;
+  border-left: 4px solid #22d3ee;
+  padding-left: 15px;
+  margin: 15px 0;
+}
+
+.desc{
+  color:#aaa;
+  margin-bottom:20px;
+  text-align: left;
+}
+
+/* CARD PROMPT */
+.card-prompt{
+  background:#0f172a;
+  padding:10px;
+  border-radius:15px;
+  margin-bottom:25px;
+  box-shadow:0 0 10px rgba(0,0,0,0.5);
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+/* BUTTON COPY */
+.copy-btn{
+  margin-top:0px;
+  padding:10px 15px;
+  border:none;
+  border-radius:8px;
+  background:#06b6d4;
+  color:white;
+  cursor:pointer;
+  float:right;
+  box-shadow:0 0 10px rgba(0,0,0,0.5);
+}
+
+.copy-btn:hover{
+  background:#043e4d;
+}
+
+hr{
+  border: none;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #f83838, transparent);
+  margin: 20px 0;
+}
+
+.card-prompt p{
+  text-align:left;
+  font-family: 'Courier New', monospace;
+  background:#020617;
+  padding:15px;
+  border-radius:10px;
+  color:#e2e8f0;
+  line-height:1.6;
+}
+
+/* center isi masing-masing */
+.kiri-img,
+.kanan-text {
+  text-align: center;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .kiri-img, .kanan-text {
+    flex-direction: column;
+  }
+}
+
+/* GAMBAR */
+.img-content{
+  width:100px;
+  height:180px;
+  border-radius:9px;
+  object-fit:cover;
+  aspect-ratio:9/16;
+  margin-bottom: 10px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.3);
+  cursor:pointer;
+}
+
+.tengah {
+  margin: 10px auto;
+}
+
+.konten-row{
+  display:flex;
+  gap:10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-download {
+  display: inline-block;
+  padding: 8px 12px;
+  background: #28a745;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.btn-download:hover {
+  background: #1a6d2c;
+  border: 2px solid #ff0000;
+}
+
+/* ### HALAMAN TIM ### HALAMAN TIM ### HALAMAN TIM ### */
+.card-tim {
+  background: rgba(255,255,255,0.05);
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+/* tombol */
+.btn {
+  padding: 5px 8px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit { background: orange; }
+.hapus { background: red; color: white; }
+
+#search {
+  width: 100%;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  border: none;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+padding:20px;
+}
+
+.toolbar{
+display:flex;
+justify-content:space-between;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:20px;
+}
+
+#search{
+padding:12px;
+width:250px;
+border:none;
+border-radius:10px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+color: rgb(255, 255, 255);
+border-radius: 10px;
+overflow: hidden;
+}
+
+th{
+background:#3b83f666;
+backdrop-filter: blur(10px);
+border: 2px solid rgba(255,255,255,0.2);
+-webkit-backdrop-filter: blur(10px);
+padding:14px;
+}
+
+td{
+background: rgba(255,255,255,0.1);
+backdrop-filter: blur(10px);
+border: 2px solid rgba(255,255,255,0.2);
+-webkit-backdrop-filter: blur(10px);
+padding:14px;
+text-align:center;
+}
+
+button{
+font-family: 'Courier New', monospace;
+padding:10px 14px;
+font-style: bold;
+border:none;
+border-radius:8px;
+cursor:pointer;
+background: #3b82f6;
+color: #ffffff;
+}
+
+button:hover {
+  border: 2px solid #ff0000;
+  background: rgba(38, 0, 255, 0.224);
+}
+
+.btn-blue{background:#3b82f6;color:white;}
+.btn-green{background:#22c55e;color:white;}
+.btn-red{background:#ef4444;color:white;}
+.btn-yellow{background:#f59e0b;color:white;}
+
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+display:none;
+justify-content:center;
+align-items:center;
+background:rgba(0,0,0,.6);
+}
+
+.popup-box{
+padding:25px;
+border-radius:15px;
+width:330px;
+position: relative;
+z-index: 99999;
+background: rgba(30, 41, 59, 0.7);
+backdrop-filter: blur(6px);
+}
+
+.popup-box input,
+.popup-box select{
+width:100%;
+height:52px;
+padding:0 15px;
+margin-bottom:14px;
+border:none;
+border-radius:12px;
+font-size:17px;
+box-sizing:border-box;
+}
+
+.popup-box button{
+width:48%;
+height:48px;
+font-size:17px;
+position: relative;
+z-index: 99999;
+cursor: pointer;
+}
+
+.video {
+  width: 100px;
+  height: 180px;
+  border-radius: 9px;
+  object-fit: cover;
+  aspect-ratio: 9/16;
+  display: block;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/*FUNGSI LIHAT SELENGKAPNYA*/
+.card-prompt {
+  background: #0f172a;
+  padding: 16px;
+  border-radius: 12px;
+  color: white;
+  margin-bottom: 20px;
+}
+
+/* TEXT */
+.text-content {
+  max-height: 100px;
+  overflow: hidden;
+  line-height: 1.6;
+  transition: 0.3s ease;
+}
+
+.text-content.expanded {
+  max-height: 1000px;
+}
+
+/* BUTTON GROUP */
+.btn-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn-group button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+/* TOGGLE (kiri - soft) */
+.toggle-btn {
+  background: transparent;
+  border: 1px solid #3b82f6;
+  color: #3b82f6;
+}
+
+.toggle-btn:hover {
+  background: #3b82f6;
+  color: white;
+}
+
+/* COPY (kanan - primary) */
+.copy-btn {
+  background: #3b82f6;
+  color: white;
+}
+
+.copy-btn:hover {
+  background: #2563eb;
+}
