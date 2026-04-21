@@ -481,6 +481,8 @@ color: #ffffff;
 button:hover {
   border: 2px solid #ff0000;
   background: rgba(38, 0, 255, 0.224);
+  width: 120px;
+  height: 60px;
 }
 
 .btn-blue{background:#3b82f6;color:white;}
@@ -600,4 +602,21 @@ cursor: pointer;
 
 .copy-btn:hover {
   background: #2563eb;
+}
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  p {
+    font-size: 14px;
+  }
 }

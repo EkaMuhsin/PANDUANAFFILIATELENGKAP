@@ -4,8 +4,10 @@ console.log("JS AKTIF");
 // ======================
 const users = [
   {loginNama: "yoki", kode: "123"},
-  {loginNama: "admin", kode: "999"},
-  {loginNama: "budi", kode: "456"}
+  {loginNama: "admin", kode: "842"},
+  {loginNama: "glg", kode: "948"},
+  {loginNama: "nzr", kode: "715"},
+  {loginNama: "hmd", kode: "628"}
 ];
 
 function cekLogin(){
