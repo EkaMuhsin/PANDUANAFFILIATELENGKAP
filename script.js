@@ -1533,41 +1533,36 @@ function zoom(img){
 
 //////////////////////////////...HALAMAN TIM...//////////////////////////////
 // LOAD DATA TIM
-let dataTim = JSON.parse(localStorage.getItem("tim")) || [];
+let dataTim = [];
 let editIndex = -1;
+let editId = null;
 
-function loadTim(filter=""){
+function loadTim() {
+  fetch("http://127.0.0.1:3000/get-tim")
+    .then(res => res.json())
+    .then(data => {
+      tampilkanData(data);
+      dataTim = data; // ✅ simpan ke variabel global
 
-let tbody = document.getElementById("tbodyTim");
-tbody.innerHTML = "";
+      let tbody = document.getElementById("tbodyTim");
+      tbody.innerHTML = "";
 
-dataTim.forEach((item,index)=>{
-
-let text = (item.timNama + item.username).toLowerCase();
-
-if(text.includes(filter.toLowerCase())){
-
-tbody.innerHTML += `
-<tr>
-<td>${index+1}</td>
-<td>${item.timNama}</td>
-<td>${item.username}</td>
-<td>${item.domisili}</td>
-<td>${item.status}</td>
-
-<td>
-<button class="btn-yellow" onclick="editTim(${index})">Edit</button>
-<button class="btn-red" onclick="hapusTim(${index})">Hapus</button>
-</td>
-</tr>
-`;
-
-}
-
-});
-
-localStorage.setItem("tim",JSON.stringify(dataTim));
-
+      data.forEach((item, index) => {
+      tbody.innerHTML += `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${item.timNama}</td>
+          <td>${item.username}</td>
+          <td>${item.domisili}</td>
+          <td>${item.status}</td>
+          <td>
+            <button class="btn-yellow" onclick="editTim(${item.id})">Edit</button>
+            <button class="btn-red" onclick="hapusTim(${item.id})">Hapus</button>
+          </td>
+        </tr>
+      `;
+      });
+    });
 }
 
 
@@ -1591,68 +1586,127 @@ editIndex=-1;
 
 
 // simpan
-function simpanTim(){
+function simpanTim() {
+  let timNama = document.getElementById("timNama").value.trim();
+  let username = document.getElementById("username").value.trim();
+  let domisili = document.getElementById("domisili").value.trim();
+  let status = document.getElementById("status").value;
 
-let timNama = document.getElementById("timNama").value.trim();
-let username = document.getElementById("username").value.trim();
-let domisili = document.getElementById("domisili").value.trim();
-let status = document.getElementById("status").value;
+  if (!timNama || !username) {
+    alert("Isi data dulu");
+    return;
+  }
 
-if(timNama=="" || username==""){
-alert("Isi data dulu");
-return;
-}
+  // 🔥 MODE EDIT
+  if (editId) {
+    fetch(`http://127.0.0.1:3000/update-tim/${editId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ timNama, username, domisili, status })
+    })
+    .then(res => res.text())
+    .then(data => {
+      alert(data);
+      loadTim();
+      tutupPopup();
+      editId = null;
+    });
 
-if(editIndex>=0){
-
-dataTim[editIndex] = {
-timNama: timNama,
-username: username,
-domisili: domisili,
-status: status
-};
-
-}else{
-
-dataTim.push({
-timNama: timNama,
-username: username,
-domisili: domisili,
-status: status
-});
-
-}
-localStorage.setItem("tim", JSON.stringify(dataTim));
-loadTim();
-tutupPopup();
-
+  } else {
+    // 🔥 MODE TAMBAH
+    fetch("http://127.0.0.1:3000/simpan-tim", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ timNama, username, domisili, status })
+    })
+    .then(res => res.text())
+    .then(data => {
+      alert(data);
+      loadTim();
+      tutupPopup();
+    });
+  }
 }
 
 
 // edit
-function editTim(i){
+function editTim(id) {
+  editId = id;
 
-bukaPopup();
+  fetch("http://127.0.0.1:3000/get-tim")
+    .then(res => res.json())
+    .then(data => {
+      let item = data.find(x => x.id == id);
 
-document.getElementById("timNama").value = dataTim[i].timNama;
-document.getElementById("username").value = dataTim[i].username;
-document.getElementById("domisili").value = dataTim[i].domisili;
-document.getElementById("status").value = dataTim[i].status;
+      document.getElementById("timNama").value = item.timNama;
+      document.getElementById("username").value = item.username;
+      document.getElementById("domisili").value = item.domisili;
+      document.getElementById("status").value = item.status;
 
-editIndex=i;
+      bukaPopup();
+    });
 }
 
 
 // hapus
-function hapusTim(i){
-
-if(confirm("Hapus data ini?")){
-dataTim.splice(i,1);
-loadTim();
+function hapusTim(id) {
+  if (confirm("Hapus data ini?")) {
+    fetch(`http://127.0.0.1:3000/hapus-tim/${id}`, {
+      method: "DELETE"
+    })
+    .then(res => res.text())
+    .then(data => {
+      alert(data);
+      loadTim();
+    });
+  }
 }
 
+// cari tim
+function cariTim(keyword) {
+  if (!keyword) {
+    loadTim();
+    return;
+  }
+
+  fetch("http://127.0.0.1:3000/get-tim")
+    .then(res => res.json())
+    .then(data => {
+      let hasil = data.filter(item =>
+        item.timNama.toLowerCase().includes(keyword.toLowerCase()) ||
+        item.username.toLowerCase().includes(keyword.toLowerCase())
+      );
+
+      tampilkanData(hasil);
+    });
 }
 
+// fungsi tampilkan data
+function tampilkanData(data) {
+  let tbody = document.getElementById("tbodyTim");
+  tbody.innerHTML = "";
+
+  data.forEach((item, index) => {
+    tbody.innerHTML += `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${item.timNama}</td>
+        <td>${item.username}</td>
+        <td>${item.domisili}</td>
+        <td>${item.status}</td>
+        
+        <td>
+          <button onclick="editTim(${item.id})">Edit</button>
+          <button onclick="hapusTim(${item.id})">Hapus</button>
+        </td>
+      </tr>
+    `;
+  });
+}
 
 // export excel
 function exportExcel(){
