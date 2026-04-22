@@ -1608,7 +1608,7 @@ function simpanTim() {
     })
     .then(res => res.text())
     .then(data => {
-      alert(data);
+      showToast(data);
       loadTim();
       tutupPopup();
       editId = null;
