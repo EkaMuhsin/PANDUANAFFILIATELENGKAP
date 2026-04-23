@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700,Inter:wght@700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Affiliate Mastermind</title>
+<meta property="og:title" content="Affiliate Mastermind">
+<meta property="og:description" content="Website panduan affiliate lengkap dan mudah digunakan">
+<meta property="og:image" content="https://ekamuhsin.github.io/PANDUANAFFILIATELENGKAP/img/logo.png">
+<meta property="og:url" content="https://ekamuhsin.github.io/PANDUANAFFILIATELENGKAP/">
+<meta property="og:type" content="website">
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<div class="body">
+<!-- LOGIN -->
+<div id="loginPage">
+<h2>Login Dulu ya Brehh...</h2>
+<p class="subtitle1">isi sesuai yang admin berikan<br>jangan bagikan ke siapapun!<br>Awas lu!</p>
+
+<input id="loginNama" placeholder="Masukkan Username"><br>
+<input id="kode" placeholder="Masukkan Code"><br>
+
+<button onclick="cekLogin()">Masuk</button>
+<p id="error"></p>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none;">
+
+<div class="header">
+
+<img src="img/logo.png" class="logo">
+
+<h1 class="title">
+PANDUAN AFFILIATOR TIM <br>
+<span class="brand">💎AFFILIATE MASTERMIND🏆</span>
+<span class="textpojok">ASYAB ENTREPRENEUR MASTERMIND</span>
+</h1>
+
+</div>
+
+<hr class="garis">
+
+<!-- HOME -->
+<div id="home">
+
+<div class="menu">
+  <div class="card" onclick="buka('pengertian')">PENGERTIAN AFFILIATE</div>
+  <div class="card" onclick="buka('kerja')">CARA KERJA AFFILIATE</div>
+  <div class="card" onclick="buka('bangun')">CARA BANGUN AKUN AFFILIATE DARI 0</div>
+  <div class="card" onclick="buka('jenis')">JENIS-JENIS KONTEN</div>
+  <div class="card" onclick="buka('kenapa')">MENGAPA PILIH KELAS AFFILIATE MASTERMIND?</div>
+  <div class="card" onclick="buka('daftar')">DAFTAR AFFILIATOR AFFILIATE MASTERMIND</div>
+</div>
+
+<p class="subtitle">"para kreator senior itu tidak memandang views, tapi mereka main di konsisten"</p>
+<p class="subtitle">"para kreator senior tidak gampang ngeluh, karena mereka baru merasakan hasil setelah 1 tahun kemudian"</p>
+<p class="subtitle">"yang penting konsisten saja dulu, karena ini pekerjaan paling mudah"</p>
+<p class="subtitle">💎GO SUKSES UNTUK KITA SEMUA🏆</p>
+<p class="follow">Kritik dan Saran Klik SosMed di Bawah!, sekalian follow wkwk</p>
+
+<div class="sosmed">
+<a href="https://wa.me/6285823486505">WhatsApp</a>
+<a href="https://www.instagram.com/mochmd.ez?igsh=MTZsMWFuZDlleGlwMA%3D%3D&utm_source=qr">Instagram</a>
+<a href="https://www.facebook.com/skak.mat.9889?mibextid=rS40aB7S9Ucbxw6v">Facebook</a>
+<a href="https://www.tiktok.com/@farmaherbalchin?_r=1&_t=ZS-95cPTXVeGIe">TikTok</a>
+</div>
+
+</div>
+
+<!-- HALAMAN 2 -->
+<div id="hal2" style="display:none;">
+<button onclick="kembali()">⬅ Kembali</button>
+
+<div class="detail">
+<div id="judul"></div>
+<div id="isi"></div>
+<div id="lanjut"></div>
+</div>
+</div>
+
+<!-- HALAMAN 3 -->
+<div id="hal3" style="display:none;">
+  <div id="mediaHal3"></div>
+<button onclick="kembali2()">⬅ Kembali</button>
+
+<div class="detail2">
+<h3 class="judulh3">Cara Konten</h3>
+<div id="isiHal3"></div>
+</div>
+</div>
+
+<!-- HALAMAN TIM -->
+ <div id="halTim" style="display:none;"> <!-- ubah jadi block biar kelihatan -->
+  <div id="mediaTim"></div>
+
+  <button onclick="kembalikehome()">⬅ Kembali</button>
+
+  <div class="container">
+
+    <h1>DAFTAR TIM AFFILIATE</h1>
+
+    <div class="toolbar">
+
+  <input 
+    type="text" 
+    id="search" 
+    placeholder="🔍 Padosi Nami Kaleh Username teng mriki nggeh..." 
+    onkeyup="cariTim(this.value)"
+  >
+
+  <button class="btn-blue" onclick="bukaPopup()">Tambah Tim</button>
+
+  <button class="btn-green" onclick="exportExcel()">Export Excel</button>
+
+</div>
+
+    <table border="1" cellpadding="10">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Nama</th>
+          <th>Username TikTok</th>
+          <th>Domisili</th>
+          <th>Status</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+
+      <tbody id="tbodyTim"></tbody>
+    </table>
+
+  </div>
+
+
+  <!-- ===================== -->
+  <!-- POPUP -->
+  <!-- ===================== -->
+  <div class="popup" id="popupTim" style="display:none;">
+
+    <div class="popup-box">
+
+      <h2>Tambah / Edit Tim</h2>
+
+      <input type="text" id="timNama" placeholder="Masukkan Nama">
+      <input type="text" id="username" placeholder="Masukkan Username TikTok">
+      <input type="text" id="domisili" placeholder="Masukkan Domisili">
+
+      <select id="status">
+        <option value="Aktif">Aktif</option>
+        <option value="Nonaktif">Nonaktif</option>
+      </select>
+
+      <br><br>
+
+      <button type="button" class="btn-blue" onclick="simpanTim()">Simpan</button>
+      <button type="button" class="btn-red" onclick="tutupPopup()">Tutup</button>
+
+    </div>
+  </div>
+
+</div>
+
+
+
+</div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

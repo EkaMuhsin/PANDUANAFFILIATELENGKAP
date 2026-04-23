@@ -1,19 +1,32 @@
-console.log("PAKAI SERVER INI");
 const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 
+// middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// folder public (HTML kamu)
+app.use(express.static(path.join(__dirname, "public")));
+
+// root
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// koneksi mysql
+require("dotenv").config();
+
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "Cepluk1!",
-  database: "panduanaffiliate"
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT
 });
 
 db.connect((err) => {
@@ -25,79 +38,89 @@ db.connect((err) => {
 });
 
 
-// ✅ SIMPAN DATA
+// ================= API =================
+
+// GET DATA
+app.get("/get-tim",(req,res)=>{
+
+db.query("SELECT * FROM tim",(err,result)=>{
+if(err){
+res.send(err);
+}else{
+res.json(result);
+}
+
+});
+
+});
+
+// SIMPAN
 app.post("/simpan-tim", (req, res) => {
   const { timNama, username, domisili, status } = req.body;
 
-  if (!timNama || !username) {
-    return res.status(400).send("Data tidak lengkap");
-  }
-
   const sql = "INSERT INTO tim (timNama, username, domisili, status) VALUES (?, ?, ?, ?)";
-
-  db.query(sql, [timNama, username, domisili, status], (err, result) => {
-    if (err) {
-      console.log(err);
-      res.send("Gagal simpan");
-    } else {
-      res.send("Berhasil simpan");
-    }
+  db.query(sql, [timNama, username, domisili, status], (err) => {
+    if (err) return res.send("Gagal simpan");
+    res.send("Berhasil simpan");
   });
 });
 
-
-// ✅ AMBIL DATA
-console.log("Route get-tim aktif");
-app.get("/get-tim", (req, res) => {
-  console.log("ROOT KEAKSES");
-
-  db.query("SELECT * FROM tim", (err, result) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send("error");
-    } else {
-      res.json(result);
-    }
-  });
-});
-
-// HAPUS TIM
-app.delete("/hapus-tim/:id", (req, res) => {
-  const id = req.params.id;
-
-  db.query("DELETE FROM tim WHERE id = ?", [id], (err) => {
-    if (err) {
-      console.log(err);
-      res.send("Gagal hapus");
-    } else {
-      res.send("Berhasil hapus");
-    }
-  });
-});
-
-// EDIT TIM
+// UPDATE
 app.put("/update-tim/:id", (req, res) => {
-  const id = req.params.id;
   const { timNama, username, domisili, status } = req.body;
+  const id = req.params.id;
 
   const sql = `
     UPDATE tim 
-    SET timNama=?, username=?, domisili=?, status=?
+    SET timNama=?, username=?, domisili=?, status=? 
     WHERE id=?
   `;
 
   db.query(sql, [timNama, username, domisili, status, id], (err) => {
-    if (err) {
-      console.log(err);
-      res.send("Gagal update");
-    } else {
-      res.send("Berhasil update");
-    }
+    if (err) return res.send("Gagal update");
+    res.send("Berhasil update");
   });
 });
 
+// DELETE
+app.delete("/hapus-tim/:id",(req,res)=>{
 
-// ✅ JALANKAN SERVER (HARUS PALING BAWAH)
-app.listen(3000, () => {
-  console.log("Server jalan di port 3000");
+db.query("DELETE FROM tim WHERE id=?",[req.params.id],(err,result)=>{
+if(err){
+res.send("gagal");
+}else{
+res.send("berhasil dihapus");
+}
+});
+
+});
+
+
+// ambil semua media
+app.get("/media", (req, res) => {
+  try {
+    const imgFiles = fs.readdirSync("./public/img")
+      .filter(f => /\.(jpg|jpeg|png|webp)$/i.test(f))
+      .sort();
+
+    const videoFiles = fs.readdirSync("./public/video")
+      .filter(f => /\.(mp4|webm|mov)$/i.test(f))
+      .sort();
+
+    res.json({
+      images: imgFiles,
+      videos: videoFiles
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Gagal load media" });
+  }
+});
+
+
+// ================= RUN SERVER =================
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log("Server jalan di port " + PORT);
 });
