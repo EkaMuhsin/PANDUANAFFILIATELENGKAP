@@ -99,11 +99,14 @@ res.send("berhasil dihapus");
 // ambil semua media
 app.get("/media", (req, res) => {
   try {
-    const imgFiles = fs.readdirSync("./public/img")
+    const imgPath = path.join(__dirname, "public", "img");
+    const videoPath = path.join(__dirname, "public", "video");
+
+    const imgFiles = fs.readdirSync(imgPath)
       .filter(f => /\.(jpg|jpeg|png|webp)$/i.test(f))
       .sort();
 
-    const videoFiles = fs.readdirSync("./public/video")
+    const videoFiles = fs.readdirSync(videoPath)
       .filter(f => /\.(mp4|webm|mov)$/i.test(f))
       .sort();
 
@@ -111,8 +114,9 @@ app.get("/media", (req, res) => {
       images: imgFiles,
       videos: videoFiles
     });
+
   } catch (err) {
-    console.log(err);
+    console.log("ERROR MEDIA:", err);
     res.status(500).json({ error: "Gagal load media" });
   }
 });

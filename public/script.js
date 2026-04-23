@@ -1531,78 +1531,51 @@ function zoom(img){
 }
 
 //////////////////////////////...HALAMAN TIM...//////////////////////////////
-const BASE_URL = "https://july-sappy-unabashed.ngrok-free.dev";
-
 let dataTim = [];
-let editIndex = -1;
+let editId = null;
 
 // =======================
 // LOAD DATA
 // =======================
-function loadTim(filter = ""){
+function loadTim(filter = "") {
+  fetch("/get-tim")
+    .then(res => res.json())
+    .then(data => {
 
-fetch("http://localhost:3000/get-tim")
-.then(res => res.json())
-.then(data => {
+      dataTim = data;
 
-dataTim = data;
+      let tbody = document.getElementById("tbodyTim");
+      tbody.innerHTML = "";
 
-let tbody = document.getElementById("tbodyTim");
-tbody.innerHTML = "";
+      data.forEach((item, index) => {
 
-data.forEach((item,index)=>{
+        let text = (item.timNama + item.username).toLowerCase();
 
-let text = (item.timNama + item.username).toLowerCase();
+        if (text.includes(filter.toLowerCase())) {
 
-if(text.includes(filter.toLowerCase())){
+          tbody.innerHTML += `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${item.timNama}</td>
+            <td>${item.username}</td>
+            <td>${item.domisili}</td>
+            <td>${item.status}</td>
+            <td>
+              <button class="btn-yellow" onclick="editTim(${item.id})">Edit</button>
+              <button class="btn-red" onclick="hapusTim(${item.id})">Hapus</button>
+            </td>
+          </tr>
+          `;
+        }
 
-tbody.innerHTML += `
-<tr>
-<td>${index+1}</td>
-<td>${item.timNama}</td>
-<td>${item.username}</td>
-<td>${item.domisili}</td>
-<td>${item.status}</td>
-<td>
-<button class="btn-yellow" onclick="editTim(${index})">Edit</button>
-<button class="btn-red" onclick="hapusTim(${item.id})">Hapus</button>
-</td>
-</tr>
-`;
+      });
 
+    })
+    .catch(err => {
+      console.log("ERROR LOAD:", err);
+    });
 }
 
-});
-
-});
-}
-
-
-// =======================
-// TAMPILKAN DATA
-// =======================
-function tampilkanData(data) {
-  console.log("RENDER:", data); // 🔥
-
-  let tbody = document.getElementById("tbodyTim");
-  tbody.innerHTML = "";
-
-  data.forEach((item, index) => {
-    tbody.innerHTML += `
-      <tr>
-        <td>${index + 1}</td>
-        <td>${item.timNama}</td>
-        <td>${item.username}</td>
-        <td>${item.domisili}</td>
-        <td>${item.status}</td>
-        <td>
-          <button onclick="editTim(${item.id})">Edit</button>
-          <button onclick="hapusTim(${item.id})">Hapus</button>
-        </td>
-      </tr>
-    `;
-  });
-}
 
 // =======================
 // SIMPAN / EDIT
@@ -1614,32 +1587,29 @@ function simpanTim() {
   let status = document.getElementById("status").value;
 
   if (!timNama || !username) {
-  alert("Data wajib diisi");
-  return;
+    alert("Data wajib diisi");
+    return;
   }
 
   let url = editId
-    ? `${BASE_URL}/update-tim/${editId}`
-    : `${BASE_URL}/simpan-tim`;
+    ? `/update-tim/${editId}`
+    : `/simpan-tim`;
 
   let method = editId ? "PUT" : "POST";
 
   fetch(url, {
     method: method,
     headers: {
-      "Content-Type": "application/json",
-      "ngrok-skip-browser-warning": "true"
+      "Content-Type": "application/json"
     },
     body: JSON.stringify({ timNama, username, domisili, status })
   })
   .then(res => res.text())
   .then(msg => {
-  alert(msg);
-  editId = null;
-
-  tutupPopup();   // 🔥 TAMBAH INI
-
-  loadTim();
+    alert(msg);
+    editId = null;
+    tutupPopup();
+    loadTim();
   })
   .catch(err => {
     console.log("ERROR SIMPAN:", err);
@@ -1651,37 +1621,77 @@ function simpanTim() {
 // =======================
 // EDIT
 // =======================
-function editTim(i){
+function editTim(id) {
 
-bukaPopup();
+  let item = dataTim.find(x => x.id == id);
+  if (!item) return alert("Data tidak ditemukan");
 
-document.getElementById("timNama").value = dataTim[i].timNama;
-document.getElementById("username").value = dataTim[i].username;
-document.getElementById("domisili").value = dataTim[i].domisili;
-document.getElementById("status").value = dataTim[i].status;
+  bukaPopup();
 
-editIndex = dataTim[i].id;
+  document.getElementById("timNama").value = item.timNama;
+  document.getElementById("username").value = item.username;
+  document.getElementById("domisili").value = item.domisili;
+  document.getElementById("status").value = item.status;
+
+  editId = id;
 }
 
+function loadMedia(targetId) {
+  fetch("/media")
+    .then(res => res.json())
+    .then(data => {
+
+      let container = document.getElementById(targetId);
+      if (!container) return;
+
+      container.innerHTML = "";
+
+      const fragment = document.createDocumentFragment();
+
+      // IMAGE
+      data.images.forEach(file => {
+        const img = document.createElement("img");
+        img.src = `/img/${file}`;
+        img.width = 150;
+        img.style.margin = "5px";
+        fragment.appendChild(img);
+      });
+
+      // VIDEO
+      data.videos.forEach(file => {
+        const video = document.createElement("video");
+        video.src = `/video/${file}`;
+        video.width = 200;
+        video.controls = true;
+        video.style.margin = "5px";
+        fragment.appendChild(video);
+      });
+
+      container.appendChild(fragment);
+    })
+    .catch(err => {
+      console.log("ERROR MEDIA:", err);
+    });
+}
 
 // =======================
 // HAPUS
 // =======================
-function hapusTim(id){
+function hapusTim(id) {
+  if (!confirm("Hapus data ini?")) return;
 
-if(confirm("Hapus data ini?")){
-
-fetch("http://localhost:3000/hapus-tim/" + id,{
-method:"DELETE"
-})
-.then(res=>res.text())
-.then(data=>{
-alert(data);
-loadTim();
-});
-
-}
-
+  fetch(`/hapus-tim/${id}`, {
+    method: "DELETE"
+  })
+  .then(res => res.text())
+  .then(msg => {
+    alert(msg);
+    loadTim();
+  })
+  .catch(err => {
+    console.log("ERROR HAPUS:", err);
+    alert("Gagal hapus");
+  });
 }
 
 
@@ -1696,30 +1706,40 @@ function cariTim(keyword) {
     item.username.toLowerCase().includes(keyword)
   );
 
-  tampilkanData(hasil);
+  let tbody = document.getElementById("tbodyTim");
+  tbody.innerHTML = "";
+
+  hasil.forEach((item, index) => {
+    tbody.innerHTML += `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${item.timNama}</td>
+        <td>${item.username}</td>
+        <td>${item.domisili}</td>
+        <td>${item.status}</td>
+        <td>
+          <button class="btn-yellow" onclick="editTim(${item.id})">Edit</button>
+          <button class="btn-red" onclick="hapusTim(${item.id})">Hapus</button>
+        </td>
+      </tr>
+    `;
+  });
 }
 
+
 // =======================
-// BUKA POPUP
+// POPUP
 // =======================
 function bukaPopup() {
   document.getElementById("popupTim").style.display = "flex";
 }
 
-
-// =======================
-// TUTUP POPUP
-// =======================
 function tutupPopup() {
   document.getElementById("popupTim").style.display = "none";
   resetForm();
   editId = null;
 }
 
-
-// =======================
-// RESET FORM
-// =======================
 function resetForm() {
   document.getElementById("timNama").value = "";
   document.getElementById("username").value = "";
@@ -1727,66 +1747,11 @@ function resetForm() {
   document.getElementById("status").value = "Aktif";
 }
 
-// EXPORT EXCEL
-function exportExcel(){
-
-let csv = "No,Nama,Username,Domisili,Status\n";
-
-dataTim.forEach((item,index)=>{
-csv += `${index+1},${item.timNama},${item.username},${item.domisili},${item.status}\n`;
-});
-
-let blob = new Blob([csv], {type:"text/csv"});
-let a = document.createElement("a");
-
-a.href = URL.createObjectURL(blob);
-a.download = "data_tim.csv";
-a.click();
-
-}
-
 
 // =======================
 // AUTO LOAD
 // =======================
 loadTim();
-
-// MEDIA
-function loadMedia(targetId) {
-  fetch(`${BASE_URL}/media`, {
-    headers: {
-      "ngrok-skip-browser-warning": "true"
-    }
-  })
-  .then(res => res.json())
-  .then(data => {
-    let container = document.getElementById(targetId);
-    if (!container) return;
-
-    container.innerHTML = "";
-
-    const fragment = document.createDocumentFragment();
-
-    data.images.forEach(file => {
-      const img = document.createElement("img");
-      img.src = `${BASE_URL}/img/${file}`;
-      img.width = 150;
-      img.style.margin = "5px";
-      fragment.appendChild(img);
-    });
-
-    data.videos.forEach(file => {
-      const video = document.createElement("video");
-      video.src = `${BASE_URL}/video/${file}`;
-      video.width = 200;
-      video.controls = true;
-      video.style.margin = "5px";
-      fragment.appendChild(video);
-    });
-
-    container.appendChild(fragment);
-  });
-}
 
 //////////////////////////////...FUNGSI KEMBALI...//////////////////////////////
 
