@@ -2,9 +2,9 @@
   "name": "blog-prompt",
   "version": "1.0.0",
   "description": "Website sederhana untuk membantu affiliator  \r menggunakan HTML, CSS, dan JavaScript.",
-  "main": "script.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
