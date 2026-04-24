@@ -6,7 +6,8 @@ const cloudinary = require("cloudinary").v2;
 
 const app = express();
 
-console.log("SERVER FINAL SUPABASE");
+console.log("SERVER FINAL SUPABASE LOADED");
+console.log("SUPABASE:", SUPABASE_URL, SUPABASE_KEY ? "ADA" : "KOSONG");
 
 // ================= MIDDLEWARE =================
 app.use(cors());
