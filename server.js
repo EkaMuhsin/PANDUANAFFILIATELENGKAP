@@ -75,7 +75,6 @@ app.get("/cloud-media", async (req, res) => {
 });
 
 // ================= RUN =================
-const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log("Server jalan di port", PORT);
