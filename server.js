@@ -6,7 +6,7 @@ const cloudinary = require("cloudinary").v2;
 
 const app = express();
 
-console.log("SERVER FINAL NO DB");
+console.log("SERVER FINAL SUPABASE");
 
 // ================= MIDDLEWARE =================
 app.use(cors());
@@ -26,19 +26,110 @@ app.get("/", (req, res) => {
 // ================= ENV =================
 require("dotenv").config();
 
-// ================= CLOUDINARY CONFIG =================
+// ================= CLOUDINARY =================
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET
 });
 
+// ================= SUPABASE =================
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_KEY = process.env.SUPABASE_KEY;
+
 // ================= TEST =================
 app.get("/tes", (req, res) => {
-  res.send("SERVER SUDAH UPDATE");
+  res.send("SERVER SUDAH UPDATE SUPABASE");
 });
 
-// ================= MEDIA LOCAL (OPTIONAL) =================
+// ================= GET TIM =================
+app.get("/get-tim", async (req, res) => {
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/tim`, {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`
+      }
+    });
+
+    const data = await response.json();
+    res.json(data);
+
+  } catch (err) {
+    console.log("ERROR GET TIM:", err);
+    res.status(500).json({ error: "Gagal ambil data tim" });
+  }
+});
+
+// ================= SIMPAN =================
+app.post("/simpan-tim", async (req, res) => {
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/tim`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`
+      },
+      body: JSON.stringify(req.body)
+    });
+
+    if (!response.ok) throw new Error();
+
+    res.send("Berhasil simpan");
+
+  } catch {
+    res.status(500).send("Gagal simpan");
+  }
+});
+
+// ================= UPDATE =================
+app.put("/update-tim/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/tim?id=eq.${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`
+      },
+      body: JSON.stringify(req.body)
+    });
+
+    if (!response.ok) throw new Error();
+
+    res.send("Berhasil update");
+
+  } catch {
+    res.status(500).send("Gagal update");
+  }
+});
+
+// ================= DELETE =================
+app.delete("/hapus-tim/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/tim?id=eq.${id}`, {
+      method: "DELETE",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`
+      }
+    });
+
+    if (!response.ok) throw new Error();
+
+    res.send("Berhasil dihapus");
+
+  } catch {
+    res.status(500).send("Gagal hapus");
+  }
+});
+
+// ================= MEDIA LOCAL =================
 app.get("/media", (req, res) => {
   try {
     const imgPath = path.join(__dirname, "public", "img");
@@ -63,37 +154,26 @@ app.get("/media", (req, res) => {
   }
 });
 
-// ================= CLOUDINARY VIDEO =================
+// ================= CLOUDINARY =================
 app.get("/cloud-media", async (req, res) => {
   try {
-    console.log("ENV:", {
-      cloud_name: process.env.CLOUD_NAME,
-      api_key: process.env.CLOUD_API_KEY ? "ADA" : "KOSONG",
-      api_secret: process.env.CLOUD_API_SECRET ? "ADA" : "KOSONG"
-    });
-
     const result = await cloudinary.search
       .expression("resource_type:video")
       .sort_by("created_at", "desc")
       .max_results(50)
       .execute();
 
-    console.log("RESULT:", result);
-
     const videos = result.resources.map(v => v.secure_url);
 
     res.json({ videos });
 
   } catch (err) {
-    console.log("ERROR CLOUDINARY FULL:", err);
-    res.status(500).json({
-      error: err.message,
-      detail: err
-    });
+    console.log("ERROR CLOUDINARY:", err);
+    res.status(500).json({ error: "Gagal ambil video" });
   }
 });
 
-// ================= RUN SERVER =================
+// ================= RUN =================
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, "0.0.0.0", () => {
