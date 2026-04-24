@@ -43,10 +43,7 @@ function buka(key){
 
 //KHUSUS HALAMAN TIM
 if(key=="daftar"){
-
-  document.getElementById("home").style.display="none";
-
-  document.getElementById("halTim").style.display="none";
+  document.getElementById("halTim").style.display = "block";
   loadTim(); //biar data muncul
   return;
 }
@@ -54,7 +51,7 @@ if(key=="daftar"){
 //////////////////////////////...HALAMAN 2...//////////////////////////////
 //selain tim masuk ke hal2
 else{
-document.getElementById("hal2").style.display="none";
+document.getElementById("hal2").style.display="block";
 
 // ======================
 // HALAMAN 2
@@ -1545,7 +1542,7 @@ function loadTim(filter = "") {
 
    let tbody = document.getElementById("tbodyTim");
   if (!tbody) return;
-  
+
   fetch("/get-tim")
     .then(res => res.json())
     .then(data => {
