@@ -1745,7 +1745,7 @@ function exportExcel() {
 
     ws[cellAddress].s = {
       fill: {
-        fgColor: { rgb: "FFFF00" } // kuning
+        fgColor: { rgb: "FFD700" } // kuning
       },
       font: {
         bold: true
