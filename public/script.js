@@ -1769,7 +1769,7 @@ function loadMedia() {
   video.controls = true;
 
   // 🔥 TAMBAH CLASS
-  video.className = "video-item";
+  video.className = "videoall";
 
   container.appendChild(video);
 });

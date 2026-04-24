@@ -552,7 +552,7 @@ z-index: 99999;
 cursor: pointer;
 }
 
-#video-container {
+.videoall {
   width: 100px;
   height: 180px;
   border-radius: 9px;
