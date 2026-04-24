@@ -58,48 +58,48 @@ cloudinary.config({
 // ================= API TIM =================
 
 // GET DATA
-app.get("/get-tim", (req, res) => {
-  db.query("SELECT * FROM tim", (err, result) => {
-    if (err) return res.send(err);
-    res.json(result);
-  });
-});
+//app.get("/get-tim", (req, res) => {
+//  db.query("SELECT * FROM tim", (err, result) => {
+//    if (err) return res.send(err);
+//    res.json(result);
+//  });
+//});
 
 // SIMPAN
-app.post("/simpan-tim", (req, res) => {
-  const { timNama, username, domisili, status } = req.body;
+//app.post("/simpan-tim", (req, res) => {
+//  const { timNama, username, domisili, status } = req.body;
 
-  const sql = "INSERT INTO tim (timNama, username, domisili, status) VALUES (?, ?, ?, ?)";
-  db.query(sql, [timNama, username, domisili, status], (err) => {
-    if (err) return res.send("Gagal simpan");
-    res.send("Berhasil simpan");
-  });
-});
+//  const sql = "INSERT INTO tim (timNama, username, domisili, status) VALUES (?, ?, ?, ?)";
+//  db.query(sql, [timNama, username, domisili, status], (err) => {
+//    if (err) return res.send("Gagal simpan");
+//    res.send("Berhasil simpan");
+//  });
+//});
 
 // UPDATE
-app.put("/update-tim/:id", (req, res) => {
-  const { timNama, username, domisili, status } = req.body;
-  const id = req.params.id;
+//app.put("/update-tim/:id", (req, res) => {
+//  const { timNama, username, domisili, status } = req.body;
+//  const id = req.params.id;
 
-  const sql = `
-    UPDATE tim 
-    SET timNama=?, username=?, domisili=?, status=? 
-    WHERE id=?
-  `;
+//  const sql = `
+//    UPDATE tim 
+//    SET timNama=?, username=?, domisili=?, status=? 
+//    WHERE id=?
+//  `;
 
-  db.query(sql, [timNama, username, domisili, status, id], (err) => {
-    if (err) return res.send("Gagal update");
-    res.send("Berhasil update");
-  });
-});
+//  db.query(sql, [timNama, username, domisili, status, id], (err) => {
+//    if (err) return res.send("Gagal update");
+//    res.send("Berhasil update");
+//  });
+//});
 
 // DELETE
-app.delete("/hapus-tim/:id", (req, res) => {
-  db.query("DELETE FROM tim WHERE id=?", [req.params.id], (err) => {
-    if (err) return res.send("gagal");
-    res.send("berhasil dihapus");
-  });
-});
+//app.delete("/hapus-tim/:id", (req, res) => {
+//  db.query("DELETE FROM tim WHERE id=?", [req.params.id], (err) => {
+//    if (err) return res.send("gagal");
+//    res.send("berhasil dihapus");
+//  });
+//});
 
 
 // ================= MEDIA LOCAL (OPSIONAL) =================
