@@ -1637,7 +1637,7 @@ function editTim(id) {
 }
 
 function loadMedia(targetId) {
-  fetch(`${BASE_URL}/cloud-media`)
+  fetch("/cloud-media") // ❗ HAPUS BASE_URL
     .then(res => res.json())
     .then(data => {
 
@@ -1649,9 +1649,11 @@ function loadMedia(targetId) {
       data.videos.forEach(url => {
         const video = document.createElement("video");
         video.src = url;
-        video.width = 200;
+        video.width = 220;
         video.controls = true;
-        video.style.margin = "5px";
+        video.style.margin = "10px";
+        video.style.borderRadius = "10px";
+
         container.appendChild(video);
       });
 
@@ -1714,7 +1716,7 @@ function resetForm() {
   document.getElementById("status").value = "Aktif";
 }
 
-
+loadMedia("video-container");
 // =======================
 // AUTO LOAD
 // =======================
@@ -1736,4 +1738,3 @@ function kembalikehome(){
   document.getElementById("halTim").style.display="none";
   document.getElementById("home").style.display="block";
 }
-loadTim();
