@@ -1338,7 +1338,7 @@ function lanjut(jenis){
   <p class="sub">Contoh Video</p>
 
   <video class="video tengah" controls>
-    <source src="consd.mp4" type="video/mp4">
+    <source src="video/consd.mp4" type="video/mp4">
   </video>
 
   <hr>
@@ -1702,35 +1702,82 @@ function cariTim(keyword) {
 // EXPORT EXCEL (FIXED)
 // =======================
 function exportExcel() {
-
-  console.log("EXPORT DIKLIK");
-  console.log("DATA:", dataTim);
-
-  if (!dataTim || dataTim.length === 0) {
-    alert("Data kosong / belum ke-load");
+  if (dataTim.length === 0) {
+    alert("Data kosong");
     return;
   }
 
-  let csv = "No,Nama,Username,Domisili,Status\n";
+  // HEADER
+  const ws_data = [
+    ["No", "Nama", "Username", "Domisili", "Status"]
+  ];
 
+  // DATA
   dataTim.forEach((item, i) => {
-    csv += `${i + 1},${item.timNama},${item.username},${item.domisili},${item.status}\n`;
+    ws_data.push([
+      i + 1,
+      item.timNama,
+      item.username,
+      item.domisili,
+      item.status
+    ]);
   });
 
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(ws_data);
 
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "data-tim.xls";
+  // AUTO WIDTH
+  ws['!cols'] = [
+    { wch: 5 },
+    { wch: 20 },
+    { wch: 20 },
+    { wch: 20 },
+    { wch: 10 }
+  ];
 
-  document.body.appendChild(a); // 🔥 WAJIB
-  a.click();
-  document.body.removeChild(a);
+  // STYLE HEADER (KUNING)
+  const range = XLSX.utils.decode_range(ws['!ref']);
 
-  URL.revokeObjectURL(url);
+  for (let col = range.s.c; col <= range.e.c; col++) {
+    const cellAddress = XLSX.utils.encode_cell({ r: 0, c: col });
 
-  console.log("EXPORT SELESAI");
+    if (!ws[cellAddress]) continue;
+
+    ws[cellAddress].s = {
+      fill: {
+        fgColor: { rgb: "FFFF00" } // kuning
+      },
+      font: {
+        bold: true
+      },
+      alignment: {
+        horizontal: "center"
+      }
+    };
+  }
+
+  // BORDER SEMUA CELL
+  for (let row = range.s.r; row <= range.e.r; row++) {
+    for (let col = range.s.c; col <= range.e.c; col++) {
+      const cellAddress = XLSX.utils.encode_cell({ r: row, c: col });
+
+      if (!ws[cellAddress]) continue;
+
+      ws[cellAddress].s = {
+        ...ws[cellAddress].s,
+        border: {
+          top: { style: "thin" },
+          bottom: { style: "thin" },
+          left: { style: "thin" },
+          right: { style: "thin" }
+        }
+      };
+    }
+  }
+
+  XLSX.utils.book_append_sheet(wb, ws, "Data Tim");
+
+  XLSX.writeFile(wb, "data-tim.xlsx");
 }
 
 
