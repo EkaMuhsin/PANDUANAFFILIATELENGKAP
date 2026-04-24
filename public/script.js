@@ -46,7 +46,7 @@ if(key=="daftar"){
 
   document.getElementById("home").style.display="none";
 
-  document.getElementById("halTim").style.display="block";
+  document.getElementById("halTim").style.display="none";
   loadTim(); //biar data muncul
   return;
 }
@@ -54,7 +54,7 @@ if(key=="daftar"){
 //////////////////////////////...HALAMAN 2...//////////////////////////////
 //selain tim masuk ke hal2
 else{
-document.getElementById("hal2").style.display="block";
+document.getElementById("hal2").style.display="none";
 
 // ======================
 // HALAMAN 2
