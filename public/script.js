@@ -1707,77 +1707,43 @@ function exportExcel() {
     return;
   }
 
-  // HEADER
-  const ws_data = [
-    ["No", "Nama", "Username", "Domisili", "Status"]
-  ];
+  let html = `
+  <table border="1">
+    <tr style="background-color:#FFD700; font-weight:bold; text-align:center;">
+      <th>No</th>
+      <th>Nama</th>
+      <th>Username</th>
+      <th>Domisili</th>
+      <th>Status</th>
+    </tr>
+  `;
 
-  // DATA
   dataTim.forEach((item, i) => {
-    ws_data.push([
-      i + 1,
-      item.timNama,
-      item.username,
-      item.domisili,
-      item.status
-    ]);
+    html += `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${item.timNama}</td>
+        <td>${item.username}</td>
+        <td>${item.domisili}</td>
+        <td>${item.status}</td>
+      </tr>
+    `;
   });
 
-  const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.aoa_to_sheet(ws_data);
+  html += `</table>`;
 
-  // AUTO WIDTH
-  ws['!cols'] = [
-    { wch: 5 },
-    { wch: 20 },
-    { wch: 20 },
-    { wch: 20 },
-    { wch: 10 }
-  ];
+  const blob = new Blob([html], {
+    type: "application/vnd.ms-excel"
+  });
 
-  // STYLE HEADER (KUNING)
-  const range = XLSX.utils.decode_range(ws['!ref']);
+  const url = URL.createObjectURL(blob);
 
-  for (let col = range.s.c; col <= range.e.c; col++) {
-    const cellAddress = XLSX.utils.encode_cell({ r: 0, c: col });
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "data-tim.xls";
+  a.click();
 
-    if (!ws[cellAddress]) continue;
-
-    ws[cellAddress].s = {
-      fill: {
-        fgColor: { rgb: "FFD700" } // kuning
-      },
-      font: {
-        bold: true
-      },
-      alignment: {
-        horizontal: "center"
-      }
-    };
-  }
-
-  // BORDER SEMUA CELL
-  for (let row = range.s.r; row <= range.e.r; row++) {
-    for (let col = range.s.c; col <= range.e.c; col++) {
-      const cellAddress = XLSX.utils.encode_cell({ r: row, c: col });
-
-      if (!ws[cellAddress]) continue;
-
-      ws[cellAddress].s = {
-        ...ws[cellAddress].s,
-        border: {
-          top: { style: "thin" },
-          bottom: { style: "thin" },
-          left: { style: "thin" },
-          right: { style: "thin" }
-        }
-      };
-    }
-  }
-
-  XLSX.utils.book_append_sheet(wb, ws, "Data Tim");
-
-  XLSX.writeFile(wb, "data-tim.xlsx");
+  URL.revokeObjectURL(url);
 }
 
 
