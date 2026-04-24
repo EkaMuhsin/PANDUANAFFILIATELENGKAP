@@ -2,25 +2,37 @@ const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
 const path = require("path");
+const fs = require("fs");
+const cloudinary = require("cloudinary").v2;
 
 const app = express();
 
-// middleware
+// ================= MIDDLEWARE =================
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// folder public (HTML kamu)
+// ================= STATIC =================
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/img", express.static(path.join(__dirname, "public/img")));
+app.use("/video", express.static(path.join(__dirname, "public/video")));
 
-// root
+// ================= ROOT =================
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// koneksi mysql
+// ================= ENV =================
 require("dotenv").config();
 
+// ================= CLOUDINARY CONFIG =================
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET
+});
+
+// ================= DATABASE =================
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -38,20 +50,14 @@ db.connect((err) => {
 });
 
 
-// ================= API =================
+// ================= API TIM =================
 
 // GET DATA
-app.get("/get-tim",(req,res)=>{
-
-db.query("SELECT * FROM tim",(err,result)=>{
-if(err){
-res.send(err);
-}else{
-res.json(result);
-}
-
-});
-
+app.get("/get-tim", (req, res) => {
+  db.query("SELECT * FROM tim", (err, result) => {
+    if (err) return res.send(err);
+    res.json(result);
+  });
 });
 
 // SIMPAN
@@ -83,20 +89,15 @@ app.put("/update-tim/:id", (req, res) => {
 });
 
 // DELETE
-app.delete("/hapus-tim/:id",(req,res)=>{
-
-db.query("DELETE FROM tim WHERE id=?",[req.params.id],(err,result)=>{
-if(err){
-res.send("gagal");
-}else{
-res.send("berhasil dihapus");
-}
-});
-
+app.delete("/hapus-tim/:id", (req, res) => {
+  db.query("DELETE FROM tim WHERE id=?", [req.params.id], (err) => {
+    if (err) return res.send("gagal");
+    res.send("berhasil dihapus");
+  });
 });
 
 
-// ambil semua media
+// ================= MEDIA LOCAL (OPSIONAL) =================
 app.get("/media", (req, res) => {
   try {
     const imgPath = path.join(__dirname, "public", "img");
@@ -118,6 +119,26 @@ app.get("/media", (req, res) => {
   } catch (err) {
     console.log("ERROR MEDIA:", err);
     res.status(500).json({ error: "Gagal load media" });
+  }
+});
+
+
+// ================= CLOUDINARY API (🔥 INI PENTING) =================
+app.get("/cloud-media", async (req, res) => {
+  try {
+    const result = await cloudinary.search
+      .expression("resource_type:video")
+      .sort_by("created_at", "desc")
+      .max_results(50)
+      .execute();
+
+    const videos = result.resources.map(v => v.secure_url);
+
+    res.json({ videos });
+
+  } catch (err) {
+    console.log("ERROR CLOUDINARY:", err);
+    res.status(500).json({ error: "Gagal ambil video dari Cloudinary" });
   }
 });
 

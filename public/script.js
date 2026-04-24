@@ -1637,41 +1637,37 @@ function editTim(id) {
 }
 
 function loadMedia(targetId) {
-  fetch("/media")
-    .then(res => res.json())
-    .then(data => {
+  let container = document.getElementById(targetId);
+  if (!container) return;
 
-      let container = document.getElementById(targetId);
-      if (!container) return;
+  container.innerHTML = "";
 
-      container.innerHTML = "";
+  // 🔥 GANTI DENGAN URL CLOUDINARY KAMU
+  let videos = [
+    "https://res.cloudinary.com/xxxx/video/upload/vxxx/video1.mp4",
+    "https://res.cloudinary.com/xxxx/video/upload/vxxx/video2.mp4"
+  ];
 
-      const fragment = document.createDocumentFragment();
+  let images = [
+    "https://res.cloudinary.com/xxxx/image/upload/vxxx/img1.jpg"
+  ];
 
-      // IMAGE
-      data.images.forEach(file => {
-        const img = document.createElement("img");
-        img.src = `/img/${file}`;
-        img.width = 150;
-        img.style.margin = "5px";
-        fragment.appendChild(img);
-      });
+  videos.forEach(url => {
+    let video = document.createElement("video");
+    video.src = url;
+    video.width = 200;
+    video.controls = true;
+    video.style.margin = "5px";
+    container.appendChild(video);
+  });
 
-      // VIDEO
-      data.videos.forEach(file => {
-        const video = document.createElement("video");
-        video.src = `/video/${file}`;
-        video.width = 200;
-        video.controls = true;
-        video.style.margin = "5px";
-        fragment.appendChild(video);
-      });
-
-      container.appendChild(fragment);
-    })
-    .catch(err => {
-      console.log("ERROR MEDIA:", err);
-    });
+  images.forEach(url => {
+    let img = document.createElement("img");
+    img.src = url;
+    img.width = 150;
+    img.style.margin = "5px";
+    container.appendChild(img);
+  });
 }
 
 // =======================
