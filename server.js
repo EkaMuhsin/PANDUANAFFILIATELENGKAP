@@ -6,26 +6,50 @@ const cloudinary = require("cloudinary").v2;
 
 const app = express();
 
-console.log("SERVER FINAL SUPABASE LOADED");
-console.log("SUPABASE:", SUPABASE_URL, SUPABASE_KEY ? "ADA" : "KOSONG");
+console.log("SERVER CLEAN RUNNING");
 
 // ================= MIDDLEWARE =================
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 // ================= STATIC =================
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/img", express.static(path.join(__dirname, "public/img")));
-app.use("/video", express.static(path.join(__dirname, "public/video")));
 
 // ================= ROOT =================
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.send("SERVER HIDUP");
 });
 
 // ================= ENV =================
 require("dotenv").config();
+
+// ================= TEST =================
+app.get("/tes", (req, res) => {
+  res.send("OK SERVER HIDUP");
+});
+
+// ================= SUPABASE =================
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_KEY = process.env.SUPABASE_KEY;
+
+// ================= GET TIM =================
+app.get("/get-tim", async (req, res) => {
+  try {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/tim`, {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`
+      }
+    });
+
+    const data = await r.json();
+    res.json(data);
+
+  } catch (err) {
+    console.log("ERROR:", err);
+    res.status(500).json({ error: "Gagal ambil data" });
+  }
+});
 
 // ================= CLOUDINARY =================
 cloudinary.config({
@@ -34,13 +58,27 @@ cloudinary.config({
   api_secret: process.env.CLOUD_API_SECRET
 });
 
-// ================= SUPABASE =================
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_KEY;
+app.get("/cloud-media", async (req, res) => {
+  try {
+    const result = await cloudinary.search
+      .expression("resource_type:video")
+      .sort_by("created_at", "desc")
+      .max_results(50)
+      .execute();
 
-// ================= TEST =================
-app.get("/tes", (req, res) => {
-  res.send("SERVER SUDAH UPDATE SUPABASE");
+    const videos = result.resources.map(v => v.secure_url);
+    res.json({ videos });
+
+  } catch (err) {
+    res.status(500).json({ error: "Gagal ambil video" });
+  }
+});
+
+// ================= RUN =================
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log("Server jalan di port", PORT);
 });
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
