@@ -1531,13 +1531,18 @@ function zoom(img){
 }
 
 //////////////////////////////...HALAMAN TIM...//////////////////////////////
+// =======================
+// GLOBAL
+// =======================
 let dataTim = [];
 let editId = null;
 
+
 // =======================
-// LOAD DATA
+// LOAD DATA TIM
 // =======================
 function loadTim(filter = "") {
+
   fetch("/get-tim")
     .then(res => res.json())
     .then(data => {
@@ -1545,6 +1550,8 @@ function loadTim(filter = "") {
       dataTim = data;
 
       let tbody = document.getElementById("tbodyTim");
+      if (!tbody) return;
+
       tbody.innerHTML = "";
 
       data.forEach((item, index) => {
@@ -1571,9 +1578,7 @@ function loadTim(filter = "") {
       });
 
     })
-    .catch(err => {
-      console.log("ERROR LOAD:", err);
-    });
+    .catch(err => console.log("ERROR LOAD:", err));
 }
 
 
@@ -1581,6 +1586,7 @@ function loadTim(filter = "") {
 // SIMPAN / EDIT
 // =======================
 function simpanTim() {
+
   let timNama = document.getElementById("timNama").value.trim();
   let username = document.getElementById("username").value.trim();
   let domisili = document.getElementById("domisili").value.trim();
@@ -1636,31 +1642,26 @@ function editTim(id) {
   editId = id;
 }
 
-function loadMedia(targetId) {
-  fetch("/cloud-media") // ❗ HAPUS BASE_URL
-    .then(res => res.json())
-    .then(data => {
 
-      let container = document.getElementById(targetId);
-      if (!container) return;
+// =======================
+// HAPUS (FIXED)
+// =======================
+function hapusTim(id) {
 
-      container.innerHTML = "";
+  if (!confirm("Yakin hapus data?")) return;
 
-      data.videos.forEach(url => {
-        const video = document.createElement("video");
-        video.src = url;
-        video.width = 220;
-        video.controls = true;
-        video.style.margin = "10px";
-        video.style.borderRadius = "10px";
-
-        container.appendChild(video);
-      });
-
-    })
-    .catch(err => {
-      console.log("ERROR LOAD MEDIA:", err);
-    });
+  fetch(`/hapus-tim/${id}`, {
+    method: "DELETE"
+  })
+  .then(res => res.text())
+  .then(msg => {
+    alert(msg);
+    loadTim();
+  })
+  .catch(err => {
+    console.log("ERROR HAPUS:", err);
+    alert("Gagal hapus");
+  });
 }
 
 
@@ -1668,6 +1669,7 @@ function loadMedia(targetId) {
 // SEARCH
 // =======================
 function cariTim(keyword) {
+
   keyword = keyword.toLowerCase();
 
   let hasil = dataTim.filter(item =>
@@ -1697,6 +1699,31 @@ function cariTim(keyword) {
 
 
 // =======================
+// EXPORT EXCEL (FIXED)
+// =======================
+function exportExcel() {
+
+  if (dataTim.length === 0) {
+    alert("Data kosong");
+    return;
+  }
+
+  let csv = "No,Nama,Username,Domisili,Status\n";
+
+  dataTim.forEach((item, i) => {
+    csv += `${i + 1},${item.timNama},${item.username},${item.domisili},${item.status}\n`;
+  });
+
+  const blob = new Blob([csv], { type: "text/csv" });
+  const a = document.createElement("a");
+
+  a.href = URL.createObjectURL(blob);
+  a.download = "data-tim.csv";
+  a.click();
+}
+
+
+// =======================
 // POPUP
 // =======================
 function bukaPopup() {
@@ -1716,10 +1743,49 @@ function resetForm() {
   document.getElementById("status").value = "Aktif";
 }
 
-loadMedia("video-container");
+
+// =======================
+// LOAD VIDEO (FIXED)
+// =======================
+function loadMedia() {
+
+  // 🔥 CEGAH muncul di halaman lain
+  let halTim = document.getElementById("halTim");
+  if (!halTim || halTim.style.display !== "block") return;
+
+  fetch("/cloud-media")
+    .then(res => res.json())
+    .then(data => {
+
+      let container = document.getElementById("video-container");
+      if (!container) return;
+
+      container.innerHTML = "";
+
+      data.videos.forEach(url => {
+
+  const video = document.createElement("video");
+  video.src = url;
+  video.controls = true;
+
+  // 🔥 TAMBAH CLASS
+  video.className = "video-item";
+
+  container.appendChild(video);
+});
+
+    })
+    .catch(err => console.log("ERROR VIDEO:", err));
+}
+
+
 // =======================
 // AUTO LOAD
 // =======================
+
+// ❌ JANGAN LOAD VIDEO DI SINI
+// loadMedia();  ← DIHAPUS
+
 loadTim();
 
 //////////////////////////////...FUNGSI KEMBALI...//////////////////////////////
