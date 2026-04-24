@@ -43,29 +43,32 @@ app.get("/tes", (req, res) => {
   res.send("SERVER SUDAH UPDATE SUPABASE");
 });
 
-// ================= GET TIM =================
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_KEY = process.env.SUPABASE_KEY;
+
+// GET
 app.get("/get-tim", async (req, res) => {
   try {
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/tim`, {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/tim`, {
       headers: {
         apikey: SUPABASE_KEY,
         Authorization: `Bearer ${SUPABASE_KEY}`
       }
     });
 
-    const data = await response.json();
+    const data = await r.json();
     res.json(data);
 
   } catch (err) {
-    console.log("ERROR GET TIM:", err);
-    res.status(500).json({ error: "Gagal ambil data tim" });
+    console.log(err);
+    res.status(500).json({ error: "Gagal ambil data" });
   }
 });
 
-// ================= SIMPAN =================
+// POST
 app.post("/simpan-tim", async (req, res) => {
   try {
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/tim`, {
+    await fetch(`${SUPABASE_URL}/rest/v1/tim`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -75,12 +78,10 @@ app.post("/simpan-tim", async (req, res) => {
       body: JSON.stringify(req.body)
     });
 
-    if (!response.ok) throw new Error();
-
     res.send("Berhasil simpan");
 
   } catch {
-    res.status(500).send("Gagal simpan");
+    res.send("Gagal simpan");
   }
 });
 
