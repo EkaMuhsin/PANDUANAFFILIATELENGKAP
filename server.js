@@ -66,19 +66,30 @@ app.get("/media", (req, res) => {
 // ================= CLOUDINARY VIDEO =================
 app.get("/cloud-media", async (req, res) => {
   try {
+    console.log("ENV:", {
+      cloud_name: process.env.CLOUD_NAME,
+      api_key: process.env.CLOUD_API_KEY ? "ADA" : "KOSONG",
+      api_secret: process.env.CLOUD_API_SECRET ? "ADA" : "KOSONG"
+    });
+
     const result = await cloudinary.search
       .expression("resource_type:video")
       .sort_by("created_at", "desc")
       .max_results(50)
       .execute();
 
+    console.log("RESULT:", result);
+
     const videos = result.resources.map(v => v.secure_url);
 
     res.json({ videos });
 
   } catch (err) {
-    console.log("ERROR CLOUDINARY:", err);
-    res.status(500).json({ error: "Gagal ambil video" });
+    console.log("ERROR CLOUDINARY FULL:", err);
+    res.status(500).json({
+      error: err.message,
+      detail: err
+    });
   }
 });
 
