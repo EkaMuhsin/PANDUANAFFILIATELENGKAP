@@ -101,12 +101,13 @@ app.delete("/hapus-tim/:id", async (req, res) => {
     const id = req.params.id;
 
     const r = await fetch(`${SUPABASE_URL}/rest/v1/tim?id=eq.${id}`, {
-      method: "DELETE",
-      headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`
-      }
-    });
+  method: "DELETE",
+  headers: {
+    "Content-Type": "application/json",
+    apikey: SUPABASE_KEY,
+    Authorization: `Bearer ${SUPABASE_KEY}`
+  }
+});
 
     if (!r.ok) throw new Error();
 

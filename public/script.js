@@ -1647,8 +1647,8 @@ function editTim(id) {
 // HAPUS (FIXED)
 // =======================
 function hapusTim(id) {
-
-  if (!confirm("Yakin hapus data?")) return;
+  console.log("ID DIHAPUS:", id)
+  if (!confirm("HAPUS TIM HARAP KONFIRMASI ADMIN DULU!")) return;
 
   fetch(`/hapus-tim/${id}`, {
     method: "DELETE"
@@ -1714,12 +1714,17 @@ function exportExcel() {
     csv += `${i + 1},${item.timNama},${item.username},${item.domisili},${item.status}\n`;
   });
 
-  const blob = new Blob([csv], { type: "text/csv" });
-  const a = document.createElement("a");
+  const url = URL.createObjectURL(blob);
 
-  a.href = URL.createObjectURL(blob);
-  a.download = "data-tim.csv";
-  a.click();
+const a = document.createElement("a");
+a.href = url;
+a.download = "data-tim.csv";
+
+document.body.appendChild(a);
+a.click();
+
+document.body.removeChild(a);
+URL.revokeObjectURL(url);
 }
 
 
@@ -1742,7 +1747,9 @@ function resetForm() {
   document.getElementById("domisili").value = "";
   document.getElementById("status").value = "Aktif";
 }
-loadTim();
+if (document.getElementById("tbodyTim")) {
+  loadTim();
+}
 
 //////////////////////////////...FUNGSI KEMBALI...//////////////////////////////
 
