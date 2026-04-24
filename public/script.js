@@ -1751,7 +1751,7 @@ function loadMedia() {
 
   // 🔥 CEGAH muncul di halaman lain
   let halTim = document.getElementById("halTim");
-  if (!halTim || halTim.style.display !== "block") return;
+  if (!halTim || halTim.style.display !== "none") return;
 
   fetch("/cloud-media")
     .then(res => res.json())
