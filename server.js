@@ -34,21 +34,25 @@ cloudinary.config({
 });
 
 // ================= DATABASE =================
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT
-});
+//const db = mysql.createConnection({
+//  host: process.env.DB_HOST,
+//  user: process.env.DB_USER,
+//  password: process.env.DB_PASS,
+//  database: process.env.DB_NAME,
+//  port: process.env.DB_PORT
+//});
 
-db.connect((err) => {
-  if (err) {
-    console.log("Koneksi gagal:", err);
-  } else {
-    console.log("MySQL Connected");
-  }
-});
+//if (process.env.DB_HOST) {
+//  db.connect((err) => {
+//    if (err) {
+//      console.log("Koneksi gagal:", err);
+//    } else {
+//      console.log("MySQL Connected");
+//    }
+//  });
+//} else {
+//  console.log("DB tidak digunakan");
+//}
 
 
 // ================= API TIM =================
