@@ -1543,6 +1543,9 @@ let editId = null;
 // =======================
 function loadTim(filter = "") {
 
+   let tbody = document.getElementById("tbodyTim");
+  if (!tbody) return;
+  
   fetch("/get-tim")
     .then(res => res.json())
     .then(data => {
