@@ -1742,43 +1742,6 @@ function resetForm() {
   document.getElementById("domisili").value = "";
   document.getElementById("status").value = "Aktif";
 }
-
-
-// =======================
-// LOAD VIDEO (FIXED)
-// =======================
-function loadMedia(targetId) {
-  fetch("/media")
-    .then(res => res.json())
-    .then(data => {
-
-      let container = document.getElementById(targetId);
-      if (!container) return;
-
-      container.innerHTML = "";
-
-      data.videos.forEach(file => {
-        const video = document.createElement("video");
-
-        video.src = `/video/${file}`; // 🔥 dari folder local
-        video.controls = true;
-        video.classList.add("video");
-
-        container.appendChild(video);
-      });
-
-    })
-    .catch(err => console.log("ERROR MEDIA:", err));
-}
-
-
-// =======================
-// AUTO LOAD
-// =======================
-
-// ❌ JANGAN LOAD VIDEO DI SINI
-// loadMedia();  ← DIHAPUS
-
 loadTim();
 
 //////////////////////////////...FUNGSI KEMBALI...//////////////////////////////
