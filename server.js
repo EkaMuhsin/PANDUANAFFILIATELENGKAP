@@ -119,6 +119,10 @@ app.delete("/hapus-tim/:id", async (req, res) => {
   }
 });
 
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
 // ================= MEDIA LOCAL =================
 app.get("/media", (req, res) => {
   try {
