@@ -143,6 +143,10 @@ app.get("/cloud-media", async (req, res) => {
   }
 });
 
+app.get("/tes", (req, res) => {
+  res.send("VERSI BARU NIH");
+});
+
 
 // ================= RUN SERVER =================
 const PORT = process.env.PORT || 3000;
