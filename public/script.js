@@ -1703,8 +1703,11 @@ function cariTim(keyword) {
 // =======================
 function exportExcel() {
 
-  if (dataTim.length === 0) {
-    alert("Data kosong");
+  console.log("EXPORT DIKLIK");
+  console.log("DATA:", dataTim);
+
+  if (!dataTim || dataTim.length === 0) {
+    alert("Data kosong / belum ke-load");
     return;
   }
 
@@ -1714,17 +1717,20 @@ function exportExcel() {
     csv += `${i + 1},${item.timNama},${item.username},${item.domisili},${item.status}\n`;
   });
 
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
 
-const a = document.createElement("a");
-a.href = url;
-a.download = "data-tim.csv";
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "data-tim.xls";
 
-document.body.appendChild(a);
-a.click();
+  document.body.appendChild(a); // 🔥 WAJIB
+  a.click();
+  document.body.removeChild(a);
 
-document.body.removeChild(a);
-URL.revokeObjectURL(url);
+  URL.revokeObjectURL(url);
+
+  console.log("EXPORT SELESAI");
 }
 
 
