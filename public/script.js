@@ -1747,35 +1747,28 @@ function resetForm() {
 // =======================
 // LOAD VIDEO (FIXED)
 // =======================
-function loadMedia() {
-
-  // 🔥 CEGAH muncul di halaman lain
-  let halTim = document.getElementById("halTim");
-  if (!halTim || halTim.style.display !== "none") return;
-
-  fetch("/cloud-media")
+function loadMedia(targetId) {
+  fetch("/media")
     .then(res => res.json())
     .then(data => {
 
-      let container = document.getElementById("video-container");
+      let container = document.getElementById(targetId);
       if (!container) return;
 
       container.innerHTML = "";
 
-      data.videos.forEach(url => {
+      data.videos.forEach(file => {
+        const video = document.createElement("video");
 
-  const video = document.createElement("video");
-  video.src = url;
-  video.controls = true;
+        video.src = `/video/${file}`; // 🔥 dari folder local
+        video.controls = true;
+        video.classList.add("video");
 
-  // 🔥 TAMBAH CLASS
-  video.className = "videoall";
-
-  container.appendChild(video);
-});
+        container.appendChild(video);
+      });
 
     })
-    .catch(err => console.log("ERROR VIDEO:", err));
+    .catch(err => console.log("ERROR MEDIA:", err));
 }
 
 
