@@ -81,9 +81,6 @@ app.listen(PORT, () => {
   console.log("Server jalan di port", PORT);
 });
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_KEY;
-
 // GET
 app.get("/get-tim", async (req, res) => {
   try {
