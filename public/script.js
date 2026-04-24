@@ -1637,57 +1637,28 @@ function editTim(id) {
 }
 
 function loadMedia(targetId) {
-  let container = document.getElementById(targetId);
-  if (!container) return;
+  fetch(`${BASE_URL}/cloud-media`)
+    .then(res => res.json())
+    .then(data => {
 
-  container.innerHTML = "";
+      let container = document.getElementById(targetId);
+      if (!container) return;
 
-  // 🔥 GANTI DENGAN URL CLOUDINARY KAMU
-  let videos = [
-    "https://res.cloudinary.com/xxxx/video/upload/vxxx/video1.mp4",
-    "https://res.cloudinary.com/xxxx/video/upload/vxxx/video2.mp4"
-  ];
+      container.innerHTML = "";
 
-  let images = [
-    "https://res.cloudinary.com/xxxx/image/upload/vxxx/img1.jpg"
-  ];
+      data.videos.forEach(url => {
+        const video = document.createElement("video");
+        video.src = url;
+        video.width = 200;
+        video.controls = true;
+        video.style.margin = "5px";
+        container.appendChild(video);
+      });
 
-  videos.forEach(url => {
-    let video = document.createElement("video");
-    video.src = url;
-    video.width = 200;
-    video.controls = true;
-    video.style.margin = "5px";
-    container.appendChild(video);
-  });
-
-  images.forEach(url => {
-    let img = document.createElement("img");
-    img.src = url;
-    img.width = 150;
-    img.style.margin = "5px";
-    container.appendChild(img);
-  });
-}
-
-// =======================
-// HAPUS
-// =======================
-function hapusTim(id) {
-  if (!confirm("Hapus data ini?")) return;
-
-  fetch(`/hapus-tim/${id}`, {
-    method: "DELETE"
-  })
-  .then(res => res.text())
-  .then(msg => {
-    alert(msg);
-    loadTim();
-  })
-  .catch(err => {
-    console.log("ERROR HAPUS:", err);
-    alert("Gagal hapus");
-  });
+    })
+    .catch(err => {
+      console.log("ERROR LOAD MEDIA:", err);
+    });
 }
 
 
