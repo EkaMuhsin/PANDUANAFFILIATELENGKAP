@@ -7,6 +7,7 @@ const cloudinary = require("cloudinary").v2;
 
 const app = express();
 
+console.log("SERVER UPDATE V2");
 // ================= MIDDLEWARE =================
 app.use(cors());
 app.use(express.json());
